@@ -108,3 +108,72 @@
     async function init() {
       let e = document.getElementById("video"),
         r = e.ui,
+    n = r.getControls(),
+    o = n.getPlayer();
+  // Faster startup and reduced buffering
+  o.configure({
+    drm: {
+      clearKeys: {
+        "ae1abaaa3b050537aef6df0b3d32ad7f": "bcec14c796465542ad450a43a605e71f"
+      }
+    },
+    streaming: {
+      startAtSegmentBoundary: true, // Start playback exactly at segment boundary
+      ignoreTextStreamFailures: true, // Ignore subtitle loading issues
+      rebufferingGoal: 1, // Lower rebufferingGoal for faster resume
+      bufferingGoal: 3, // Lower bufferingGoal for faster start
+      bufferBehind: 5, // Lower bufferBehind to free memory
+      autoLowLatencyMode: true, // Enable auto low latency if available
+      lowLatencyMode: true, // Enable low-latency streaming
+      jumpLargeGaps: true, // Allow skipping over gaps in the stream
+      inaccurateManifestTolerance: 0.3 // Faster manifest synchronization
+    },
+    manifest: {
+      dash: {
+        ignoreMinBufferTime: true, // Ignore minBufferTime in MPD for faster start
+        autoCorrectDrift: true // Auto-correct time drift
+      }
+    }
+  });
+  // UI configurations
+  r.configure({
+    controlPanelElements: ["play_pause", "mute", "volume", "spacer", "time_and_duration", "quality", "fullscreen", "overflow_menu"],
+    volumeBarColors: {
+      base: 'rgba(63, 187, 1, 1)',
+      level: 'rgb(255, 69, 0)'
+    },
+    seekBarColors: {
+      base: 'rgb(41, 41, 163)',
+      buffered: 'rgb(35, 99, 3)',
+      played: 'rgba(63, 187, 1, 1)'
+    }
+  });
+  window.player = o;
+  window.ui = r;
+  o.addEventListener("error", onPlayerErrorEvent);
+  n.addEventListener("error", onUIErrorEvent);
+  // Load the video as quickly as possible
+  try {
+    await o.load("https://otte.live.fly.ww.aiv-cdn.net/pdx-nitro/live/clients/dash/enc/qlmzlpteki/out/v1/cbe557b92c4f487da3f69a14a5b1dcaf/cenc.mpd");
+    console.log("The video has now been loaded instantly!");
+  } catch (a) {
+    onPlayerError(a);
+  }
+}
+function onPlayerErrorEvent(e) {
+  onPlayerError(e.detail);
+}
+function onPlayerError(e) {
+  console.error("Error code", e.code, "object", e);
+}
+function onUIErrorEvent(e) {
+  onPlayerError(e.detail);
+}
+function initFailed(e) {
+  console.error("Unable to load the UI library!");
+}
+document.addEventListener("shaka-ui-loaded", init);
+document.addEventListener("shaka-ui-load-failed", initFailed);
+</script>
+</body>
+</html>
