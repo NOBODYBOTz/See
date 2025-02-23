@@ -36,44 +36,6 @@
     .shaka-settings-menu button:hover {
       background-color: rgb(45, 45, 45);
     }
-    /* Custom styles */
-    body {
-      background-color: #1a1a1a;
-      font-family: Arial, sans-serif;
-    }
-    .video-container {
-      position: relative;
-      width: 100%;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .video-container video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .controls {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      padding: 10px;
-      box-sizing: border-box;
-    }
-    .controls button {
-      background-color: transparent;
-      border: none;
-      color: #fff;
-      cursor: pointer;
-      font-size: 16px;
-      margin-right: 10px;
-    }
-    .controls button:hover {
-      color: #ccc;
-    }
     .logo {
       position: absolute;
       top: 10px;
@@ -87,20 +49,17 @@
     }
   </style>
 </head>
-<body>
+<body bgcolor="black" style="margin:0">
   <div class="logo">
     <a href="https://www.nobodybotz.com" target="_blank">
-      <img src="https://i.imgur.com/ynuF6rj.png" alt="NobodyBotz Logo">
+      <img src="https://envs.sh/tDN.jpg" alt="NobodyBotz Logo">
     </a>
   </div>
-  <div class="video-container">
-    <video autoplay muted playsinline data-shaka-player id="video" poster="https://www.disneystar.com/media/2231/7e25132017-009.jpg?width=1920&height=1080&mode=max&slimmage=true"></video>
-    <div class="controls">
-      <button id="play-pause-button">Play/Pause</button>
-      <button id="mute-button">Mute/Unmute</button>
-      <button id="fullscreen-button">Fullscreen</button>
+  <center>
+    <div data-shaka-player-container style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover">
+      <video autoplay muted playsinline data-shaka-player id="video" poster="https://www.disneystar.com/media/2231/7e25132017-009.jpg?width=1920&height=1080&mode=max&slimmage=true" style="width:100%;height:100%"></video>
     </div>
-  </div>
+  </center>
   <script>
     if (confirm("Join Our Telegram Channel @NobodyBotz")) {
       window.location.href = "https://t.me/NobodyBotz";
@@ -108,72 +67,14 @@
     async function init() {
       let e = document.getElementById("video"),
         r = e.ui,
-    n = r.getControls(),
-    o = n.getPlayer();
-  // Faster startup and reduced buffering
-  o.configure({
-    drm: {
-      clearKeys: {
-        "ae1abaaa3b050537aef6df0b3d32ad7f": "bcec14c796465542ad450a43a605e71f"
-      }
-    },
-    streaming: {
-      startAtSegmentBoundary: true, // Start playback exactly at segment boundary
-      ignoreTextStreamFailures: true, // Ignore subtitle loading issues
-      rebufferingGoal: 1, // Lower rebufferingGoal for faster resume
-      bufferingGoal: 3, // Lower bufferingGoal for faster start
-      bufferBehind: 5, // Lower bufferBehind to free memory
-      autoLowLatencyMode: true, // Enable auto low latency if available
-      lowLatencyMode: true, // Enable low-latency streaming
-      jumpLargeGaps: true, // Allow skipping over gaps in the stream
-      inaccurateManifestTolerance: 0.3 // Faster manifest synchronization
-    },
-    manifest: {
-      dash: {
-        ignoreMinBufferTime: true, // Ignore minBufferTime in MPD for faster start
-        autoCorrectDrift: true // Auto-correct time drift
-      }
-    }
-  });
-  // UI configurations
-  r.configure({
-    controlPanelElements: ["play_pause", "mute", "volume", "spacer", "time_and_duration", "quality", "fullscreen", "overflow_menu"],
-    volumeBarColors: {
-      base: 'rgba(63, 187, 1, 1)',
-      level: 'rgb(255, 69, 0)'
-    },
-    seekBarColors: {
-      base: 'rgb(41, 41, 163)',
-      buffered: 'rgb(35, 99, 3)',
-      played: 'rgba(63, 187, 1, 1)'
-    }
-  });
-  window.player = o;
-  window.ui = r;
-  o.addEventListener("error", onPlayerErrorEvent);
-  n.addEventListener("error", onUIErrorEvent);
-  // Load the video as quickly as possible
-  try {
-    await o.load("https://otte.live.fly.ww.aiv-cdn.net/pdx-nitro/live/clients/dash/enc/qlmzlpteki/out/v1/cbe557b92c4f487da3f69a14a5b1dcaf/cenc.mpd");
-    console.log("The video has now been loaded instantly!");
-  } catch (a) {
-    onPlayerError(a);
-  }
-}
-function onPlayerErrorEvent(e) {
-  onPlayerError(e.detail);
-}
-function onPlayerError(e) {
-  console.error("Error code", e.code, "object", e);
-}
-function onUIErrorEvent(e) {
-  onPlayerError(e.detail);
-}
-function initFailed(e) {
-  console.error("Unable to load the UI library!");
-}
-document.addEventListener("shaka-ui-loaded", init);
-document.addEventListener("shaka-ui-load-failed", initFailed);
-</script>
-</body>
-</html>
+        n = r.getControls(),
+        o = n.getPlayer();
+      // Faster startup and reduced buffering
+      o.configure({
+        drm: {
+          clearKeys: {
+            "ae1abaaa3b050537aef6df0b3d32ad7f": "bcec14c796465542ad450a43a605e71f"
+          }
+        },
+        streaming: {
+          
